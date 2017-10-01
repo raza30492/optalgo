@@ -1,0 +1,56 @@
+package com.jazasoft.rollplan;
+    dialect "java"
+    
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+
+import com.jazasoft.rollplan.model.RollSolution;
+import com.jazasoft.rollplan.model.Ply;
+import com.jazasoft.rollplan.model.Roll;
+import java.util.HashSet;
+
+global HardSoftScoreHolder scoreHolder;
+
+// ############################################################################
+// Hard constraints
+// ############################################################################
+
+
+rule "requiredTotalLength"
+    when
+        $roll : Roll($length : length)
+        accumulate(
+            Ply(
+                roll == $roll,
+                $requiredLength : length);
+            $requiredTotalLength : sum($requiredLength);
+            $requiredTotalLength > $length
+        )
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, $length - $requiredTotalLength);
+end
+
+// ############################################################################
+// Soft constraints
+// ############################################################################
+
+rule "computerCost"
+    when
+        $roll : Roll($cost : cost)
+        exists Ply(roll == $roll)
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, - $cost);
+end
+
+/*
+rule "abc"
+    when
+        $roll : Roll()
+        $list : HashSet(size > 2) from collect(
+            Ply(roll == $roll)
+        )
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, 2 - $list.size());
+end
+*/
+
+

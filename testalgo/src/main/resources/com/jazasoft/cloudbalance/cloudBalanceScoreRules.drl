@@ -1,0 +1,69 @@
+package com.jazasoft.cloudbalance;
+    dialect "java"
+    
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+
+import com.jazasoft.cloudbalance.model.CloudBalance;
+import com.jazasoft.cloudbalance.model.CloudProcess;
+import com.jazasoft.cloudbalance.model.Computer;
+
+global HardSoftScoreHolder scoreHolder;
+
+// ############################################################################
+// Hard constraints
+// ############################################################################
+
+
+rule "requiredCpuPowerTotal"
+    when
+        $computer : Computer($cpuPower : cpuPower)
+        accumulate(
+            CloudProcess(
+                computer == $computer,
+                $requiredCpuPower : requiredCpuPower);
+            $requiredCpuPowerTotal : sum($requiredCpuPower);
+            $requiredCpuPowerTotal > $cpuPower
+        )
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, $cpuPower - $requiredCpuPowerTotal);
+end
+
+rule "requiredMemoryTotal"
+    when
+        $computer : Computer($memory : memory)
+        accumulate(
+            CloudProcess(
+                computer == $computer,
+                $requiredMemory : requiredMemory);
+            $requiredMemoryTotal : sum($requiredMemory);
+            $requiredMemoryTotal > $memory
+        )
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, $memory - $requiredMemoryTotal);
+end
+
+rule "requiredNetworkBandwidthTotal"
+    when
+        $computer : Computer($networkBandwidth : networkBandwidth)
+        accumulate(
+            CloudProcess(
+                computer == $computer,
+                $requiredNetworkBandwidth : requiredNetworkBandwidth);
+            $requiredNetworkBandwidthTotal : sum($requiredNetworkBandwidth);
+            $requiredNetworkBandwidthTotal > $networkBandwidth
+        )
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, $networkBandwidth - $requiredNetworkBandwidthTotal);
+end
+
+// ############################################################################
+// Soft constraints
+// ############################################################################
+
+rule "computerCost"
+    when
+        $computer : Computer($cost : cost)
+        exists CloudProcess(computer == $computer)
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, - $cost);
+end

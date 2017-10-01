@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+    <!-- Domain model configuration -->
+    <scanAnnotatedClasses/>
+
+    <!-- Score configuration -->
+    <scoreDirectorFactory>
+        <!--<easyScoreCalculatorClass>com.jazasoft.cloudbalance.CloudBalanceEasyScoreCalculator</easyScoreCalculatorClass>-->
+        <scoreDrl>com/jazasoft/rollplan/rollPlanScoreRules.drl</scoreDrl>
+    </scoreDirectorFactory>
+
+    <!-- Optimization algorithms configuration -->
+    <!--<termination>-->
+        <!--&lt;!&ndash;<secondsSpentLimit>300</secondsSpentLimit>&ndash;&gt;-->
+        <!--<bestScoreLimit>0hard/-2soft</bestScoreLimit>-->
+    <!--</termination>-->
+
+
+    <constructionHeuristic>
+        <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+    </constructionHeuristic>
+    <localSearch>
+        <termination>
+            <!--<terminationCompositionStyle>OR</terminationCompositionStyle>-->
+            <!--<bestScoreLimit>0hard/-99999soft</bestScoreLimit>-->
+            <unimprovedSecondsSpentLimit>10</unimprovedSecondsSpentLimit>
+        </termination>
+        <unionMoveSelector>
+            <changeMoveSelector/>
+            <swapMoveSelector/>
+            <pillarChangeMoveSelector/>
+            <pillarSwapMoveSelector/>
+        </unionMoveSelector>
+        <acceptor>
+            <entityTabuSize>7</entityTabuSize>
+        </acceptor>
+        <forager>
+            <acceptedCountLimit>1000</acceptedCountLimit>
+        </forager>
+    </localSearch>
+</solver>
