@@ -12,6 +12,7 @@
         <module>testalgo</module>
         <module>rollplan</module>
         <module>cutplan</module>
+        <module>rollgroup</module>
     </modules>
 
     <properties>
