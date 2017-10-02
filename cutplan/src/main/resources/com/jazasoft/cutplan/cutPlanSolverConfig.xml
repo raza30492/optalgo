@@ -13,7 +13,7 @@
     <termination>
         <!--<secondsSpentLimit>15</secondsSpentLimit>-->
         <!--<bestScoreLimit>0hard/-2500soft</bestScoreLimit>-->
-        <unimprovedSecondsSpentLimit>5</unimprovedSecondsSpentLimit>
+        <unimprovedSecondsSpentLimit>2</unimprovedSecondsSpentLimit>
     </termination>
 
     <!-- Power tweaked optimization algorithms configuration -->

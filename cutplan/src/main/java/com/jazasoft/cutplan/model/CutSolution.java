@@ -28,6 +28,8 @@ public class CutSolution {
     private List<Size> sizeList;
 
     private HardSoftScore score;
+    private boolean onlyEvenNoOfWays;
+    private boolean onlyRatio2ForAnySize;
 
     public void init() {
         ratioList = new ArrayList<>();
@@ -103,7 +105,24 @@ public class CutSolution {
         this.orderList = orderList;
     }
 
+    public boolean isOnlyEvenNoOfWays() {
+        return onlyEvenNoOfWays;
+    }
+
+    public void setOnlyEvenNoOfWays(boolean onlyEvenNoOfWays) {
+        this.onlyEvenNoOfWays = onlyEvenNoOfWays;
+    }
+
+    public boolean isOnlyRatio2ForAnySize() {
+        return onlyRatio2ForAnySize;
+    }
+
+    public void setOnlyRatio2ForAnySize(boolean onlyRatio2ForAnySize) {
+        this.onlyRatio2ForAnySize = onlyRatio2ForAnySize;
+    }
+
     public int getOrderQty() {
+        if (order == null) return 0;
         return order.values().stream().mapToInt(Integer::intValue).sum();
     }
 }

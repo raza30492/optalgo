@@ -32,25 +32,39 @@ public class CutPlanEasyScoreCalculator implements EasyScoreCalculator<CutSoluti
         for (Size size: cutSolution.getSizeList()) {
             if (size.getRatio() != null) {
                 int ratio = size.getRatio().getRatio();
+                if (cutSolution.isOnlyRatio2ForAnySize()) {
+                    if (ratio > 2) {
+                        hardScore += (2 - ratio);
+                    } else {
+                        fairnessScore += ratio * ratio * ratio * ratio;
+                    }
+                } else {
+                    fairnessScore += ratio*ratio*ratio*ratio;
+                }
                 totalRatio += ratio;
-                fairnessScore += ratio*ratio;
             }
         }
 
         if (totalRatio > cutSolution.getMaxGarments()) {
             hardScore += (cutSolution.getMaxGarments() - totalRatio);
         } else {
-            softScore += (noOfPly*totalRatio);
+            if (cutSolution.isOnlyEvenNoOfWays()) {
+                if (totalRatio > 1 && totalRatio % 2 == 1) {
+                    hardScore += -totalRatio;
+                } else {
+                    softScore += (noOfPly * totalRatio);
+                }
+            } else {
+                softScore += (noOfPly*totalRatio);
+            }
         }
 
-        if (cutSolution.getOrderQty() < 10) {
-            softScore += totalRatio;
-        }else {
+        if (cutSolution.getOrderQty() > 500) {
             softScore -= fairnessScore;
         }
-        //System.out.println("No of Ply = " + noOfPly);
-        //System.out.println("totalRatio = " + totalRatio);
-        //System.out.println("Soft Score = " + softScore);
+//        System.out.println("No of Ply = " + noOfPly);
+//        System.out.println("totalRatio = " + totalRatio);
+//        System.out.println("Soft Score = " + softScore);
 
         return HardSoftScore.valueOf(hardScore,softScore);
     }
