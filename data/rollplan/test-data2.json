@@ -1,0 +1,22 @@
+{
+	"rollList": [
+		{"id": 1, "length": 127},
+		{"id": 2, "length": 56},
+		{"id": 3, "length": 60},
+		{"id": 4, "length": 90},
+		{"id": 5, "length": 150},
+		{"id": 6, "length": 66},
+		{"id": 7, "length": 79},
+		{"id": 8, "length": 57},
+		{"id": 9, "length": 150}		
+	],
+	"markerList": [
+		{"id": 1, "length": 3.3, "noOfPly": 20},
+		{"id": 2, "length": 3.21, "noOfPly": 97},
+		{"id": 3, "length": 3.15, "noOfPly": 66},
+		{"id": 4, "length": 3.07, "noOfPly": 53},
+		{"id": 5, "length": 2.62, "noOfPly": 18},
+		{"id": 6, "length": 2.62, "noOfPly": 5},
+		{"id": 7, "length": 1.34, "noOfPly": 4}
+	]
+}

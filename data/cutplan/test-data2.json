@@ -1,0 +1,11 @@
+{
+  "maxGarments": 6,
+  "noOfCut": 1,
+  "orderList": [
+    {"size": 1, "qty": 233},
+    {"size": 2, "qty": 218},
+    {"size": 3, "qty": 1},
+    {"size": 4, "qty": 234},
+    {"size": 5, "qty": 607}
+  ]
+}
