@@ -1,11 +1,15 @@
 package com.jazasoft.cutplan;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jazasoft.cutplan.model.CutSolution;
 import com.jazasoft.cutplan.model.Ratio;
 import com.jazasoft.cutplan.model.Size;
+import com.jazasoft.util.JsonUtils;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -19,11 +23,16 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Starting...");
 
+        String dataFile = "test-data1.json";
+        if (args.length != 0) {
+            dataFile = args[0];
+        }
+
         SolverFactory<CutSolution> solverFactory = SolverFactory.createFromXmlResource("com/jazasoft/cutplan/cutPlanSolverConfig.xml");
 
         Solver<CutSolution> solver = solverFactory.buildSolver();
 
-        CutSolution unsolved = createProblem();
+        CutSolution unsolved = createProblem(dataFile);
 
         CutSolution solved = solver.solve(unsolved);
 
@@ -31,28 +40,27 @@ public class Main {
         System.out.println("Ended...");
     }
 
-    private static CutSolution createProblem() {
-        CutSolution cutSolution = new CutSolution();
-        Size size1 = new Size(1);
-        Size size2 = new Size(2);
-        Size size3 = new Size(3);
-        Size size4 = new Size(4);
-        Size size5 = new Size(5);
+    private static CutSolution createProblem(String filename) {
 
-        List<Size> sizeList = Arrays.asList(size1, size2, size3, size4, size5);
-        Map<Size, Integer> order = new HashMap<>();
-        order.put(size1,1286);
-        order.put(size2,2324);
-        order.put(size3,2107);
-        order.put(size4,1287);
-        order.put(size5,607);
+        String basePath = System.getenv("RP_HOME") + File.separator + "cutplan" + File.separator;
+        CutSolution cutSolution = null;
+        try {
+            cutSolution = JsonUtils.readJsonObject(new File(basePath + filename), CutSolution.class);
+            //System.out.println(JsonUtils.toFormattedString(cutSolution));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Invalid data in JSON. check if data is correct.");
+        }
 
-        List<Ratio> ratioList = Arrays.asList(new Ratio(0),new Ratio(1),new Ratio(2),new Ratio(3),new Ratio(4),new Ratio(5),new Ratio(6));
-
-        cutSolution.setMaxGarments(6);
-        cutSolution.setOrder(order);
-        cutSolution.setSizeList(sizeList);
-        cutSolution.setRatioList(ratioList);
+        cutSolution.init();
+//        try {
+//            System.out.println(JsonUtils.toFormattedString(cutSolution));
+//            for (Map.Entry<Size,Integer> entry: cutSolution.getOrder().entrySet()) {
+//                System.out.println(entry.getKey() + " :  " + entry.getValue());
+//            }
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
 
         return cutSolution;
     }

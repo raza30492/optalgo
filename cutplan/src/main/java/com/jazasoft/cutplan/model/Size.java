@@ -8,24 +8,32 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
  */
 @PlanningEntity
 public class Size {
-    private int id;
+    private int size;
+    private int cutId;
+    private int qty;
 
     private Ratio ratio;   //planning variable
 
     public Size() {
     }
 
-    public Size(int id) {
-        this.id = id;
+    public Size(int size) {
+        this.size = size;
     }
 
-    public int getId() {
-        return id;
+    public Size(int size, int cutId) {
+        this.size = size;
+        this.cutId = cutId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getCutId() {
+        return cutId;
     }
+
+    public void setCutId(int cutId) {
+        this.cutId = cutId;
+    }
+
 
     @PlanningVariable(valueRangeProviderRefs = "ratioRange")
     public Ratio getRatio() {
@@ -36,8 +44,24 @@ public class Size {
         this.ratio = ratio;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+
     public String getLabel() {
-        return "Size " + id;
+        return "Size " + size;
     }
 
     @Override
@@ -45,18 +69,18 @@ public class Size {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Size size = (Size) o;
+        Size size1 = (Size) o;
 
-        return id == size.id;
+        return size == size1.size;
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return size;
     }
 
     @Override
     public String toString() {
-        return "Size " + id;
+        return "Size = " + size + ", ratio = " + (ratio!=null ? ratio.getRatio() : 0);
     }
 }

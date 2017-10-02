@@ -12,11 +12,7 @@
     <artifactId>rollplan</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.jazasoft</groupId>
-            <artifactId>jazasoft-util</artifactId>
-            <version>0.0.1</version>
-        </dependency>
+
     </dependencies>
 
 
