@@ -5,24 +5,24 @@ import com.jazasoft.cutplan.model.CutSolution;
 import com.jazasoft.cutplan.model.Ratio;
 import com.jazasoft.cutplan.model.Size;
 import com.jazasoft.util.JsonUtils;
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by mdzahidraza on 02/10/17.
  */
 public class Main {
 
-    public static void main(String[] args) {
-        System.out.println("Starting...");
+    private static int totalOrderQty = 0;
+    private static List<CutSolution> solutions = new ArrayList<>();
 
+    public static void main(String[] args) {
         String dataFile = "test-data1.json";
         if (args.length != 0) {
             dataFile = args[0];
@@ -32,12 +32,21 @@ public class Main {
 
         Solver<CutSolution> solver = solverFactory.buildSolver();
 
+
+
         CutSolution unsolved = createProblem(dataFile);
+        totalOrderQty = unsolved.getOrderQty();
 
-        CutSolution solved = solver.solve(unsolved);
-
-        display(solved);
-        System.out.println("Ended...");
+        while (unsolved.getOrderQty() != 0) {
+            CutSolution solved = solver.solve(unsolved);
+            solutions.add(solved);
+            unsolved = reinit(solved);
+            System.out.println("Reamining: " + unsolved.getOrderQty());
+//            for (Map.Entry<Integer,Integer> entry: unsolved.getOrder().entrySet()){
+//                System.out.println("Size " + entry.getKey() + " : " + entry.getValue());
+//            }
+        }
+        display();
     }
 
     private static CutSolution createProblem(String filename) {
@@ -53,25 +62,41 @@ public class Main {
         }
 
         cutSolution.init();
-//        try {
-//            System.out.println(JsonUtils.toFormattedString(cutSolution));
-//            for (Map.Entry<Size,Integer> entry: cutSolution.getOrder().entrySet()) {
-//                System.out.println(entry.getKey() + " :  " + entry.getValue());
-//            }
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
+
 
         return cutSolution;
     }
 
-    private static void display(CutSolution solution) {
-        int totalGarments = 0;
-        for (Size size: solution.getSizeList()) {
-            int garments = size.getRatio().getRatio()*solution.getNoOfPly();
-            totalGarments += garments;
-            System.out.println(size.getLabel() + ": " + garments);
+    private static void display() {
+        System.out.println("\n");
+        int i = 1;
+        System.out.print("Cut\t   ");
+        for (Size size: solutions.get(0).getSizeList()){
+            System.out.print("Size"+size.getSize() + "\t");
         }
-        System.out.println("Total Garments: " + totalGarments);
+        System.out.print("total\t%cont.\n");
+
+        for (CutSolution solution: solutions) {
+            System.out.print("Cut " + i++ + " \t");
+            int totalGarments = 0;
+            int noOfPly = Utils.getNoOfPly(solution.getOrder(),solution.getSizeList());
+            for (Size size: solution.getSizeList()) {
+                int garments = size.getRatio().getRatio()*noOfPly;
+                totalGarments += garments;
+                System.out.printf("%4d \t", garments);
+            }
+            System.out.printf(" %4d \t%2.2f \n",totalGarments, (double)(totalGarments*100)/totalOrderQty);
+        }
+
+    }
+
+    private static CutSolution reinit(CutSolution solution) {
+        CutSolution solution1 = new CutSolution();
+        solution1.setMaxGarments(solution.getMaxGarments());
+        solution1.setOrder(Utils.getRemainingOrder(solution.getOrder(),solution.getSizeList()));
+        List<Size> sizeList = solution.getSizeList().stream().map(size -> new Size(size.getSize())).collect(Collectors.toList());
+        solution1.setSizeList(sizeList);
+        solution1.setRatioList(solution.getRatioList());
+        return solution1;
     }
 }

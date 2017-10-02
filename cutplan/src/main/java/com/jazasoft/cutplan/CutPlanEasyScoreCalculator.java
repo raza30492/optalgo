@@ -26,17 +26,28 @@ public class CutPlanEasyScoreCalculator implements EasyScoreCalculator<CutSoluti
         int softScore = 0;
 
         //Calculate no of ply
-        int noOfPly = cutSolution.getNoOfPly();
+        int noOfPly = Utils.getNoOfPly(cutSolution.getOrder(),cutSolution.getSizeList());
+        int totalRatio = 0;
+        int fairnessScore = 0;
+        for (Size size: cutSolution.getSizeList()) {
+            if (size.getRatio() != null) {
+                int ratio = size.getRatio().getRatio();
+                totalRatio += ratio;
+                fairnessScore += ratio*ratio;
+            }
+        }
 
-        int totalRatio = cutSolution.getSizeList().stream().mapToInt(size -> size.getRatio() != null ? size.getRatio().getRatio() : 0).sum();
         if (totalRatio > cutSolution.getMaxGarments()) {
             hardScore += (cutSolution.getMaxGarments() - totalRatio);
         } else {
             softScore += (noOfPly*totalRatio);
         }
 
-
-        softScore += totalRatio;
+        if (cutSolution.getOrderQty() < 10) {
+            softScore += totalRatio;
+        }else {
+            softScore -= fairnessScore;
+        }
         //System.out.println("No of Ply = " + noOfPly);
         //System.out.println("totalRatio = " + totalRatio);
         //System.out.println("Soft Score = " + softScore);

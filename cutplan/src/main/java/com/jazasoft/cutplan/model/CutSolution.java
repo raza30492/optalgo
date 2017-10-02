@@ -22,7 +22,7 @@ public class CutSolution {
     private int maxGarments;
     private List<Size> orderList;
     @JsonIgnore
-    private Map<Size, Integer> order;
+    private Map<Integer, Integer> order;
 
     private List<Ratio> ratioList;
     private List<Size> sizeList;
@@ -34,10 +34,8 @@ public class CutSolution {
         sizeList = new ArrayList<>();
         order = new HashMap<>();
         for (Size size: orderList) {
-            order.put(size, size.getQty());
-            for (int i = 1; i <= noOfCut; i++) {
-                sizeList.add(new Size(size.getSize(),i));
-            }
+            order.put(size.getSize(), size.getQty());
+            sizeList.add(new Size(size.getSize()));
         }
         for (int i = 0; i <= maxGarments; i++) {
             ratioList.add(new Ratio(i));
@@ -53,11 +51,11 @@ public class CutSolution {
         this.maxGarments = maxGarments;
     }
 
-    public Map<Size, Integer> getOrder() {
+    public Map<Integer, Integer> getOrder() {
         return order;
     }
 
-    public void setOrder(Map<Size, Integer> order) {
+    public void setOrder(Map<Integer, Integer> order) {
         this.order = order;
     }
 
@@ -105,20 +103,7 @@ public class CutSolution {
         this.orderList = orderList;
     }
 
-    ///////////////
-
-    public int getNoOfPly() {
-        if (order == null || sizeList == null) return 0;
-        int noOfPly = Integer.MAX_VALUE;
-
-        for (Size size: sizeList) {
-            if (size.getRatio() !=null && size.getRatio().getRatio() != 0) {
-                int ply = order.get(size) / size.getRatio().getRatio();
-                if (ply < noOfPly){
-                    noOfPly = ply;
-                }
-            }
-        }
-        return noOfPly;
+    public int getOrderQty() {
+        return order.values().stream().mapToInt(Integer::intValue).sum();
     }
 }
