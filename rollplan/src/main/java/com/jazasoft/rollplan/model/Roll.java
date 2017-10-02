@@ -5,13 +5,13 @@ package com.jazasoft.rollplan.model;
  */
 public class Roll {
     private int id;
-    private int length;
+    private double length;
     private int cost;
 
     public Roll() {
     }
 
-    public Roll(int id, int length) {
+    public Roll(int id, double length) {
         this.id = id;
         this.length = length;
         this.cost = 1;
@@ -25,11 +25,11 @@ public class Roll {
         this.id = id;
     }
 
-    public int getLength() {
+    public double getLength() {
         return length;
     }
 
-    public void setLength(int length) {
+    public void setLength(double length) {
         this.length = length;
     }
 

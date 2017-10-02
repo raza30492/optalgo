@@ -5,13 +5,13 @@ package com.jazasoft.rollplan.model;
  */
 public class Marker {
     private int id;
-    private int length;
+    private double length;
     private int noOfPly;
 
     public Marker() {
     }
 
-    public Marker(int id, int length, int noOfPly) {
+    public Marker(int id, double length, int noOfPly) {
         this.id = id;
         this.length = length;
         this.noOfPly = noOfPly;
@@ -25,11 +25,11 @@ public class Marker {
         this.id = id;
     }
 
-    public int getLength() {
+    public double getLength() {
         return length;
     }
 
-    public void setLength(int length) {
+    public void setLength(double length) {
         this.length = length;
     }
 

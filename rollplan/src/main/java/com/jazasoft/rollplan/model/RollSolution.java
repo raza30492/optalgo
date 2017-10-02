@@ -6,6 +6,7 @@ import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.drools.ProblemFactCollectionProperty;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,8 @@ public class RollSolution {
     private List<Ply> plyList;
 
     private HardSoftScore score;
+
+
 
     public void init(){
         rollList.forEach(roll -> roll.setCost(1));

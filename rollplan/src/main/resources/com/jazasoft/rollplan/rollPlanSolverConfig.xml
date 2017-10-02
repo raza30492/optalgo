@@ -23,7 +23,7 @@
         <termination>
             <!--<terminationCompositionStyle>OR</terminationCompositionStyle>-->
             <!--<bestScoreLimit>0hard/-99999soft</bestScoreLimit>-->
-            <unimprovedSecondsSpentLimit>10</unimprovedSecondsSpentLimit>
+            <unimprovedSecondsSpentLimit>5</unimprovedSecondsSpentLimit>
         </termination>
         <unionMoveSelector>
             <changeMoveSelector/>

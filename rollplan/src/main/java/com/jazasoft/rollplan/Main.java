@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
-        String dataFile = "test-data1.json";
+        String dataFile = "test-data2.json";
         if (args.length > 0) {
             dataFile = args[0];
         }
@@ -54,10 +54,10 @@ public class Main {
     private static void display(RollSolution solution) {
         //Find Smallest marker
         Marker smallestMarker = solution.getMarkerList().stream()
-                .sorted(Comparator.comparingInt(Marker::getLength))
+                .sorted(Comparator.comparingDouble(Marker::getLength))
                 .findFirst().orElse(null);
-        int unused = 0;
-        int waste = 0;
+        double unused = 0;
+        double waste = 0;
         for (final Roll roll: solution.getRollList()) {
             //Plies allocated to this roll
             List<Ply> plies = solution.getPlyList().stream()
@@ -70,12 +70,13 @@ public class Main {
                     })
                     .collect(Collectors.toList());
             //Sum total length of plies
-            int sum = plies.stream().mapToInt(Ply::getLength).sum();
+            double sum = plies.stream().mapToDouble(Ply::getLength).sum();
+            System.out.println(roll.getLabel() + ": left over = " + (roll.getLength()-sum));
             if (roll.getLength() > sum) {
                 if (roll.getLength() - sum > smallestMarker.getLength()) {
-                    unused += roll.getLength() - sum;
+                    unused += (roll.getLength() - sum);
                 }else {
-                    waste += roll.getLength() - sum;
+                    waste += (roll.getLength() - sum);
                 }
             }
 
@@ -86,10 +87,12 @@ public class Main {
                 }
             }
         }
-
-
-        System.out.println("Unused = " + unused);
-        System.out.println("wasted = " + waste);
+        double totalFabric = solution.getRollList().stream().mapToDouble(Roll::getLength).sum();
+        double usedFabric = solution.getPlyList().stream().mapToDouble(Ply::getLength).sum();
+        System.out.println("Total Fabric = " + totalFabric);
+        System.out.println("Used Fabric = " + usedFabric);
+        System.out.println("Unused Fabric = " + unused);
+        System.out.println("wasted Fabric = " + waste);
 
         System.out.println(solution.getScore().toString());
     }

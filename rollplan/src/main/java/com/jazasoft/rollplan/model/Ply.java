@@ -10,14 +10,14 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 public class Ply {
     private int id;
     private int markerId;
-    private int length;
+    private double length;
 
     private Roll roll;
 
     public Ply() {
     }
 
-    public Ply(int id, int markerId, int length) {
+    public Ply(int id, int markerId, double length) {
         this.id = id;
         this.markerId = markerId;
         this.length = length;
@@ -49,11 +49,11 @@ public class Ply {
         this.markerId = markerId;
     }
 
-    public int getLength() {
+    public double getLength() {
         return length;
     }
 
-    public void setLength(int length) {
+    public void setLength(double length) {
         this.length = length;
     }
 

@@ -26,7 +26,7 @@ rule "requiredTotalLength"
             $requiredTotalLength > $length
         )
     then
-        scoreHolder.addHardConstraintMatch(kcontext, $length - $requiredTotalLength);
+        scoreHolder.addHardConstraintMatch(kcontext,  - (int)Math.ceil(($requiredTotalLength - $length)));
 end
 
 // ############################################################################
