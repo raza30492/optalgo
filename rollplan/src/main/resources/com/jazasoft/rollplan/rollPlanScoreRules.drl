@@ -6,6 +6,7 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
 import com.jazasoft.rollplan.model.RollSolution;
 import com.jazasoft.rollplan.model.Ply;
 import com.jazasoft.rollplan.model.Roll;
+import com.jazasoft.rollplan.model.Marker;
 import java.util.HashSet;
 
 global HardSoftScoreHolder scoreHolder;
@@ -45,8 +46,9 @@ end
 rule "abc"
     when
         $roll : Roll()
+        $marker: Marker()
         $list : HashSet(size > 2) from collect(
-            Ply(roll == $roll)
+            Ply(roll == $roll && markerId == $marker.getId())
         )
     then
         scoreHolder.addSoftConstraintMatch(kcontext, 2 - $list.size());

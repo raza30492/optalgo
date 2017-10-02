@@ -47,6 +47,8 @@ public class RollSolution {
         this.rollList = rollList;
     }
 
+    @ValueRangeProvider(id = "markerRange")
+    @ProblemFactCollectionProperty
     public List<Marker> getMarkerList() {
         return markerList;
     }
