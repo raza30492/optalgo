@@ -1,10 +1,13 @@
 package com.jazasoft.rollgroup.model;
 
 import com.opencsv.bean.CsvBindByName;
+import org.optaplanner.core.api.domain.entity.PlanningEntity;
+import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 /**
  * Created by mdzahidraza on 02/10/17.
  */
+@PlanningEntity
 public class Roll {
 
     @CsvBindByName(column = "ROLL_NO")
@@ -21,6 +24,8 @@ public class Roll {
 
     @CsvBindByName(column = "WEFT")
     private Double weft;
+
+    private WidthGroup widthGroup;  //Planning variable
 
     public Roll() {
     }
@@ -63,6 +68,15 @@ public class Roll {
 
     public void setWeft(Double weft) {
         this.weft = weft;
+    }
+
+    @PlanningVariable(valueRangeProviderRefs = {"widthRange"})
+    public WidthGroup getWidthGroup() {
+        return widthGroup;
+    }
+
+    public void setWidthGroup(WidthGroup widthGroup) {
+        this.widthGroup = widthGroup;
     }
 
     @Override

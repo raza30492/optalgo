@@ -1,5 +1,5 @@
 {
-  "maxGarments": 6,
+  "maxGarments": 4,
   "orderList": [
     {"size": 1, "qty": 1286},
     {"size": 2, "qty": 2324},
